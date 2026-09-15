@@ -131,6 +131,19 @@
   position: relative;
 }
 
+/* Invisible bridge covering the gap between the trigger and the dropdown
+   (top: calc(100% + 16px) below) so the pointer stays within the hover
+   area while moving down toward the menu links, instead of closing it. */
+.nav-dropdown-item::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 16px;
+}
+
 .nav-dropdown-trigger {
   display: flex;
   align-items: center;
