@@ -46,7 +46,7 @@ export default function MentionsLegalesPage() {
           <div className="ml-block-num">02</div>
           <h2>HÉBERGEMENT</h2>
           <p>Le site est conçu et hébergé par <strong>Vercel Inc.</strong></p>
-          <p>Adresse : 340 Pine Street, Suite 701, San Francisco, CA 94104, États-Unis</p>
+          <p>Adresse : 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis</p>
           <p>Site web : <a href="https://www.vercel.com" target="_blank" rel="noopener noreferrer">www.vercel.com</a></p>
         </div>
 
