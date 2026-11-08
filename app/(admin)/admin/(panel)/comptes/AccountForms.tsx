@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef } from "react";
 import { keepValuesOnSubmit } from "@/components/admin/submit";
-import { changePassword, createAdmin } from "../../actions";
+import { changePassword, createAdmin, setMaintenance } from "../../actions";
 
 type State = { error?: string; ok?: string };
 
@@ -53,6 +53,29 @@ export function ChangePasswordForm({ minLength }: { minLength: number }) {
       <input id="confirm" name="confirm" type="password" autoComplete="new-password" minLength={minLength} required />
       <Feedback state={state} />
       <button type="submit" className="adm-btn adm-btn-primary" disabled={pending}>Modifier</button>
+    </form>
+  );
+}
+
+export function MaintenanceForm({ enabled, message }: { enabled: boolean; message: string }) {
+  const [state, action, pending] = useActionState(setMaintenance, {});
+
+  return (
+    <form action={action} onSubmit={keepValuesOnSubmit(action)} className="adm-form">
+      <label className="adm-check">
+        <input type="checkbox" name="enabled" defaultChecked={enabled} />
+        <span>Afficher l&apos;écran de maintenance aux visiteurs</span>
+      </label>
+      <label htmlFor="maintenance-message">Message (facultatif)</label>
+      <textarea
+        id="maintenance-message"
+        name="message"
+        maxLength={1000}
+        defaultValue={message}
+        placeholder="Notre site fait peau neuve. Pour toute demande, appelez le +261 38 81 202 93."
+      />
+      <Feedback state={state} />
+      <button type="submit" className="adm-btn adm-btn-primary" disabled={pending}>Enregistrer</button>
     </form>
   );
 }

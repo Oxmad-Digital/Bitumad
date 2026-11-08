@@ -4,6 +4,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Analytics from "@/components/Analytics";
 import { fontVariables } from "@/lib/fonts";
+import { getMaintenance } from "@/lib/maintenance";
+import Maintenance from "@/components/Maintenance";
 
 export const metadata: Metadata = {
   title: {
@@ -69,11 +71,13 @@ const jsonLd = {
   sameAs: [],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const maintenance = await getMaintenance();
+
   return (
     <html
       lang="fr"
@@ -92,11 +96,17 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <a href="#main-content" className="skip-link">Aller au contenu principal</a>
-        <Navbar />
-        <main id="main-content">{children}</main>
-        <Footer />
-        <Analytics />
+        {maintenance.enabled ? (
+          <Maintenance message={maintenance.message} />
+        ) : (
+          <>
+            <a href="#main-content" className="skip-link">Aller au contenu principal</a>
+            <Navbar />
+            <main id="main-content">{children}</main>
+            <Footer />
+            <Analytics />
+          </>
+        )}
       </body>
     </html>
   );

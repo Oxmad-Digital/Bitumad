@@ -103,3 +103,10 @@ CREATE TABLE IF NOT EXISTS rate_limits (
   window_start  timestamptz NOT NULL DEFAULT now(),
   count         integer NOT NULL DEFAULT 1
 );
+
+-- Réglages du site modifiables depuis l'admin (ex. `maintenance` : { "enabled": bool, "message": text }).
+CREATE TABLE IF NOT EXISTS site_settings (
+  key         text PRIMARY KEY,
+  value       jsonb NOT NULL,
+  updated_at  timestamptz NOT NULL DEFAULT now()
+);

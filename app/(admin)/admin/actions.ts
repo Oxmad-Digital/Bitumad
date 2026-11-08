@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { authenticate, endSession, normalizeEmail, requireAdmin, startSession, type AdminRow } from "@/lib/admin-auth";
@@ -9,6 +9,7 @@ import { hashPassword, MIN_PASSWORD_LENGTH, verifyPassword } from "@/lib/passwor
 import { clientIp, rateLimit, TOO_MANY } from "@/lib/rate-limit";
 import { EMAIL_RE } from "@/lib/site";
 import { MESSAGE_STATUSES, QUOTE_STATUSES } from "@/lib/admin-stats";
+import { MAINTENANCE_TAG } from "@/lib/maintenance";
 
 
 type FormState = { error?: string; ok?: string };
@@ -99,6 +100,19 @@ export async function deleteAdmin(formData: FormData) {
   if (!id || id === admin.id) return;
   await sql()`DELETE FROM admin_users WHERE id = ${id}`;
   revalidatePath("/admin/comptes");
+}
+
+/** Turns the public maintenance screen on or off; the static site pages are re-rendered on their next visit. */
+export async function setMaintenance(_state: FormState, formData: FormData): Promise<FormState> {
+  await requireAdmin();
+  const enabled = formData.get("enabled") === "on";
+  const message = String(formData.get("message") || "").trim().slice(0, 1000);
+  await sql()`INSERT INTO site_settings (key, value, updated_at)
+    VALUES ('maintenance', ${JSON.stringify({ enabled, message })}::jsonb, now())
+    ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`;
+  updateTag(MAINTENANCE_TAG);
+  revalidatePath("/", "layout");
+  return { ok: enabled ? "Écran de maintenance activé." : "Site remis en ligne." };
 }
 
 export async function changePassword(_state: FormState, formData: FormData): Promise<FormState> {
