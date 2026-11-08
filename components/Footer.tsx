@@ -23,6 +23,7 @@ export default function Footer() {
       </span>
       <span className="footer-copy">
         © 2025 BITUMAD &nbsp;·&nbsp; <a href="/mentions-legales" style={{ color: 'inherit', textDecoration: 'none' }}>Mentions légales</a>
+        &nbsp;·&nbsp; <a href="/admin/login" rel="nofollow" style={{ color: 'inherit', textDecoration: 'none' }}>Espace admin</a>
       </span>
     </footer>
   );

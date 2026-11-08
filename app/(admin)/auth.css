@@ -1,0 +1,244 @@
+.client-login {
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  padding: 88px 16px;
+}
+
+.client-login-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.client-login-background img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.client-login-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #0c0c0b66, #0c0c0b99 55%, #0c0c0bdd);
+}
+
+.client-login-content {
+  width: 100%;
+  max-width: 360px;
+}
+
+.client-login .adm-login-card {
+  background: rgba(22, 22, 20, 0.95);
+  border-color: #f5f2eb26;
+  box-shadow: 0 24px 80px #0006;
+}
+
+.client-login-legal { display: block; margin-top: 20px; color: var(--muted); font-size: 12px; text-align: center; }
+.client-login-legal:hover { color: var(--white); }
+
+.client-login-back {
+  position: absolute;
+  top: clamp(16px, 3vw, 32px);
+  left: clamp(16px, 3vw, 32px);
+  gap: 8px;
+  min-height: 44px;
+  background: #0c0c0be6;
+  border-color: #f5f2eb40;
+}
+
+.client-login-symbol {
+  position: absolute;
+  top: clamp(16px, 3vw, 32px);
+  right: clamp(16px, 3vw, 32px);
+  display: block;
+  line-height: 0;
+}
+
+.client-login-symbol img {
+  width: 48px;
+  height: 48px;
+}
+
+@media (max-width: 600px) {
+  .client-login-background img {
+    object-position: 82% center;
+  }
+}
+
+.client-login-content:has(.client-login-about),
+.client-login-content:has(.client-login-lead),
+.client-login-content:has(.client-waiting) {
+  max-width: 400px;
+}
+
+.client-login-about {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.client-login-about strong {
+  color: var(--white);
+}
+
+.client-login-about a,
+.client-waiting a,
+.client-login-switch a {
+  color: var(--accent);
+}
+
+.client-login-about .client-login-how {
+  margin-top: 12px;
+}
+
+.client-login-how summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.client-login-how summary:hover,
+.client-login-how[open] summary {
+  color: var(--white);
+}
+
+.client-login-how[open] dl {
+  margin-top: 10px;
+}
+
+.client-login-steps {
+  margin: 10px 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+}
+
+/* Prefixed: `.adm p` / `.adm h2` reset margins and would win otherwise. */
+.client-login .client-login-switch {
+  margin-top: 3px;
+  text-align: center;
+  font-size: 13.5px;
+}
+
+.client-waiting {
+  display: grid;
+  gap: 14px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.client-waiting dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.client-waiting dt {
+  color: var(--muted);
+}
+
+.client-waiting dd {
+  margin: 0;
+  word-break: break-word;
+  white-space: pre-line;
+}
+
+.client-waiting .adm-pill {
+  justify-self: start;
+}
+
+.client-waiting-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.client-login .client-login-heading {
+  margin: 0 0 10px;
+  font-size: 15px;
+}
+
+/* Sign-in card: lead line, form, then a separated footer. Prefixed to beat the `.adm p` resets. */
+.client-login .client-login-lead {
+  margin: -4px 0 22px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.client-login-lead strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.client-login-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.client-login-label-row label {
+  margin-top: 0;
+}
+
+.client-login-text-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.client-login-text-btn:hover,
+.client-login-text-btn:focus-visible {
+  color: var(--accent);
+}
+
+.client-login .client-login-back-btn {
+  align-self: center;
+  margin-top: 6px;
+}
+
+.client-login .client-login-foot {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 13.5px;
+}
+
+.client-login .client-login-foot p {
+  margin: 0;
+}
+
+.client-login-foot a {
+  color: var(--accent);
+}
+
+.client-login .client-login-foot .client-login-admin a {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.client-login-foot .client-login-admin a:hover {
+  color: var(--white);
+}

@@ -77,7 +77,8 @@ export default function MentionsLegalesPage() {
         <div className="ml-block">
           <div className="ml-block-num">05</div>
           <h2>POLITIQUE DE CONFIDENTIALITÉ</h2>
-          <p>Les données personnelles collectées (formulaires, email, téléphone, cookies) sont utilisées uniquement pour traiter les demandes clients et répondre aux messages.</p>
+          <p>Les données personnelles collectées par les formulaires (nom, organisation, email, téléphone, contenu de la demande) sont utilisées uniquement pour traiter les demandes de devis, répondre aux messages et étudier les propositions de partenariat.</p>
+          <p>Elles sont conservées dans une base de données hébergée par Neon (Neon Inc.), accessible aux seules personnes habilitées de Bitumad, et supprimées automatiquement 3 ans après l&apos;envoi de la demande.</p>
           <p>Elles ne sont jamais vendues ni partagées à des tiers sans consentement.</p>
           <p>Pour exercer vos droits : <a href="mailto:bitumadoffice@gmail.com">bitumadoffice@gmail.com</a></p>
         </div>
@@ -85,7 +86,8 @@ export default function MentionsLegalesPage() {
         <div className="ml-block">
           <div className="ml-block-num">06</div>
           <h2>COOKIES</h2>
-          <p>Le site peut utiliser des cookies pour améliorer la navigation, mesurer l&apos;audience ou enregistrer les préférences utilisateur. L&apos;utilisateur peut à tout moment accepter, refuser ou supprimer les cookies via les paramètres de son navigateur.</p>
+          <p>Le site ne dépose aucun cookie de mesure d&apos;audience ni de publicité. Seule votre préférence d&apos;affichage (thème clair ou sombre) est enregistrée dans votre navigateur.</p>
+          <p>La fréquentation est mesurée en interne, sans cookie : pages vues, provenance, type d&apos;appareil, navigateur et pays (déduit du fuseau horaire du navigateur). Un visiteur est identifié par une empreinte pseudonyme renouvelée chaque jour, qui ne permet pas de le reconnaître d&apos;un jour à l&apos;autre ; l&apos;adresse IP n&apos;est jamais conservée. Aucune mesure n&apos;est faite si votre navigateur envoie un signal Global Privacy Control ou Do Not Track.</p>
         </div>
 
         <div className="ml-block">

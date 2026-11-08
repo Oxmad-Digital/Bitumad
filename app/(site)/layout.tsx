@@ -2,35 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Bebas_Neue, Instrument_Sans, JetBrains_Mono, Poppins } from "next/font/google";
-
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["800"],
-  variable: "--font-brand",
-  display: "swap",
-});
-
-const instrumentSans = Instrument_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-mono",
-  display: "swap",
-});
+import Analytics from "@/components/Analytics";
+import { fontVariables } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -104,7 +77,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${bebasNeue.variable} ${instrumentSans.variable} ${jetbrainsMono.variable} ${poppins.variable}`}
+      className={fontVariables}
       suppressHydrationWarning
     >
       <body>
@@ -123,6 +96,7 @@ export default function RootLayout({
         <Navbar />
         <main id="main-content">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

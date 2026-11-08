@@ -1,7 +1,11 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { saveInquiry, type NewInquiry } from "@/lib/db";
+import { clientIp, rateLimit, TOO_MANY } from "@/lib/rate-limit";
+import { EMAIL_RE } from "@/lib/site";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Created on first use: without RESEND_API_KEY (local build, preview) requests are still stored for the admin.
+let resend: Resend | null = null;
 
 const LOGO_URL =
   "https://res.cloudinary.com/uuiwf5lx/image/upload/q_auto/f_auto/v1779650741/bitumad_logo_cercle_remove_v2_zcpvnc.webp";
@@ -63,15 +67,40 @@ function renderEmailTemplate(heading: string, tag: string, rows: string) {
   </div>`;
 }
 
+/** Trimmed string field, capped so a forged request can't store megabytes. */
+function field(body: Record<string, unknown>, key: string, max = 300) {
+  const value = body[key];
+  return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { type } = body;
+  if (!(await rateLimit(`contact:${clientIp(req.headers)}`, 5, 600))) {
+    return NextResponse.json({ error: TOO_MANY }, { status: 429 });
+  }
+
+  const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ error: "Requête invalide." }, { status: 400 });
+  }
+  const type = body.type;
+  const nom = field(body, "nom");
+  const email = field(body, "email");
+  const message = field(body, "message", 5000);
+
+  if (!nom || !EMAIL_RE.test(email)) {
+    return NextResponse.json({ error: "Nom et email valide requis." }, { status: 400 });
+  }
 
   let subject = "";
   let html = "";
+  let inquiry: NewInquiry;
 
   if (type === "devis") {
-    const { nom, org, tel, email, typeProjet, quantite, region, message } = body;
+    const org = field(body, "org");
+    const tel = field(body, "tel", 40);
+    const typeProjet = field(body, "typeProjet");
+    const quantite = field(body, "quantite", 100);
+    const region = field(body, "region", 100);
     subject = `Demande de devis — ${nom}${org ? ` (${org})` : ""}`;
     html = renderEmailTemplate(
       "Nouvelle demande de devis",
@@ -85,8 +114,10 @@ export async function POST(req: Request) {
         renderRow("Région de livraison", region) +
         renderRow("Détails du chantier", message)
     );
+    inquiry = { kind: "devis", name: nom, email, phone: tel, organisation: org, subject: typeProjet, message, details: { typeProjet, quantite, region } };
   } else if (type === "message") {
-    const { nom, email, sujet, message } = body;
+    const sujet = field(body, "sujet");
+    if (!message) return NextResponse.json({ error: "Message requis." }, { status: 400 });
     subject = `Message — ${sujet || "Sans sujet"} (${nom})`;
     html = renderEmailTemplate(
       "Nouveau message de contact",
@@ -96,8 +127,11 @@ export async function POST(req: Request) {
         renderRow("Sujet", sujet) +
         renderRow("Message", message)
     );
+    inquiry = { kind: "message", name: nom, email, phone: null, organisation: null, subject: sujet, message, details: {} };
   } else if (type === "partenariat") {
-    const { nom, poste, org, email, naturePartenariat, message } = body;
+    const poste = field(body, "poste");
+    const org = field(body, "org");
+    const naturePartenariat = field(body, "naturePartenariat");
     subject = `Proposition de partenariat — ${org || nom}`;
     html = renderEmailTemplate(
       "Nouvelle proposition de partenariat",
@@ -109,19 +143,32 @@ export async function POST(req: Request) {
         renderRow("Nature du partenariat", naturePartenariat) +
         renderRow("Proposition", message)
     );
+    inquiry = { kind: "partenariat", name: nom, email, phone: null, organisation: org, subject: naturePartenariat, message, details: { poste, naturePartenariat } };
   } else {
     return NextResponse.json({ error: "Type invalide" }, { status: 400 });
   }
 
+  // Stored for the admin, then emailed: the request is lost only if both fail.
+  const saved = await saveInquiry(inquiry);
+  let emailed = false;
   try {
-    await resend.emails.send({
+    if (!process.env.RESEND_API_KEY) throw new Error("RESEND_API_KEY is not set");
+    resend ??= new Resend(process.env.RESEND_API_KEY);
+    const { error } = await resend.emails.send({
       from: "Bitumad <info@bitumad.mg>",
       to: "info@bitumad.mg",
+      replyTo: email,
       subject,
       html,
     });
-    return NextResponse.json({ success: true });
-  } catch {
+    emailed = !error;
+    if (error) console.error("contact email failed:", error);
+  } catch (error) {
+    console.error("contact email failed:", error);
+  }
+
+  if (!saved && !emailed) {
     return NextResponse.json({ error: "Erreur envoi email" }, { status: 500 });
   }
+  return NextResponse.json({ success: true });
 }
