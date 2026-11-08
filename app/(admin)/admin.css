@@ -130,6 +130,13 @@ a.adm-card:hover { border-color: var(--muted); }
 .adm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 16px; }
 .adm-grid .adm-card { margin-top: 0; }
 /* Dashboard breakdowns: always two cards per row (one on mobile, see the 860px query). */
+/* Form cards side by side: equal heights, submit buttons aligned at the bottom. */
+.adm-grid-forms .adm-card { display: flex; flex-direction: column; }
+.adm-grid-forms .adm-form { flex: 1; }
+.adm-grid-forms .adm-form > .adm-btn { margin-top: auto; }
+/* Keeps the usual 16px above the button in the tallest card, where auto resolves to 0. */
+.adm-grid-forms .adm-form > :nth-last-child(2) { margin-bottom: 8px; }
+.adm h2 .adm-pill { margin: -4px 0 -4px 6px; vertical-align: middle; }
 .adm-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 /* Breakdown tables: a single-hue bar behind each label */

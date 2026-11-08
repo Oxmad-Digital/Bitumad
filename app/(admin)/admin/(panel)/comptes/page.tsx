@@ -47,7 +47,7 @@ export default async function AccountsPage() {
         ))}
       </ul>
 
-      <div className="adm-grid">
+      <div className="adm-grid adm-grid-forms">
         <section className="adm-card">
           <h2>Ajouter un compte</h2>
           <CreateAdminForm minLength={MIN_PASSWORD_LENGTH} />
