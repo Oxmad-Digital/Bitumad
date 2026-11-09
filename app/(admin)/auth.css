@@ -35,9 +35,6 @@
   box-shadow: 0 24px 80px #0006;
 }
 
-.client-login-legal { display: block; margin-top: 20px; color: var(--muted); font-size: 12px; text-align: center; }
-.client-login-legal:hover { color: var(--white); }
-
 .client-login-back {
   position: absolute;
   top: clamp(16px, 3vw, 32px);

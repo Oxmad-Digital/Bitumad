@@ -18,10 +18,8 @@ export default function AuthScreen({ title, children }: { title: string; childre
       </Link>
       <div className="client-login-content">
         <div className="adm-login-card">
-          <Link href="/" className="adm-brand">BITU<span>MAD</span> <small>Admin</small></Link>
           <h1>{title}</h1>
           {children}
-          <a href="/mentions-legales" className="client-login-legal">Mentions légales et confidentialité</a>
         </div>
       </div>
     </div>

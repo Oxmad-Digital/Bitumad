@@ -5,6 +5,7 @@ import "./admin.css";
 export const metadata: Metadata = {
   title: "Admin — Bitumad",
   robots: { index: false, follow: false },
+  icons: { icon: "https://res.cloudinary.com/uuiwf5lx/image/upload/v1784664047/bitumad_logo_carr%C3%A9_spjwlw.webp" },
 };
 
 export const viewport: Viewport = {
