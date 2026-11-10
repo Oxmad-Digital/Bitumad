@@ -8,6 +8,8 @@ const countryNames = new Intl.DisplayNames(["fr"], { type: "region" });
 const nf = new Intl.NumberFormat("fr-FR");
 const formatDuration = (s: number) => (s < 60 ? `${s} s` : `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, "0")} s`);
 const periodLabel = (p: Period) => (p === 0 ? "Tout" : p === 365 ? "1 an" : `${p} j`);
+/** Below this, one outlier (e.g. a tab opened in the background) is enough to skew the p75. */
+const MIN_VITAL_SAMPLES = 10;
 const vitalLabel = { LCP: "Chargement (LCP)", INP: "Réactivité (INP)", CLS: "Stabilité (CLS)" } as const;
 
 function formatVital(name: "LCP" | "INP" | "CLS", value: number | null) {
@@ -123,8 +125,12 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           {stats.vitals.map((vital) => (
             <div className="adm-card adm-kpi" key={vital.name}>
               <p className="adm-kpi-label">{vitalLabel[vital.name]}</p>
-              <p className="adm-kpi-value">{formatVital(vital.name, vital.p75)}</p>
-              <span className="adm-muted">{vital.samples} échantillon{vital.samples > 1 ? "s" : ""}</span>
+              <p className="adm-kpi-value">{vital.samples >= MIN_VITAL_SAMPLES ? formatVital(vital.name, vital.p75) : "—"}</p>
+              <span className="adm-muted">
+                {vital.samples >= MIN_VITAL_SAMPLES
+                  ? `${vital.samples} échantillons`
+                  : `Pas assez de données (${vital.samples}/${MIN_VITAL_SAMPLES})`}
+              </span>
             </div>
           ))}
         </div>

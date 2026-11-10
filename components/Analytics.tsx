@@ -1,9 +1,8 @@
 "use client";
 
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-
-const WebVitals = lazy(() => import("./WebVitals"));
+import WebVitals from "./WebVitals";
 
 function send(data: object) {
   const payload = JSON.stringify(data);
@@ -29,24 +28,10 @@ export default function Analytics() {
   const first = useRef(true);
   const [reportVitals, setReportVitals] = useState(false);
 
+  // Web Vitals start at hydration, not after load: web-vitals only discards a page loaded in a
+  // background tab (its LCP is when the tab was shown, not when it loaded) if it sees the tab hidden.
   useEffect(() => {
-    if (trackingDisabled()) return;
-    let idle = 0;
-    let timer = 0;
-    const enable = () => {
-      if (typeof requestIdleCallback === "function") {
-        idle = requestIdleCallback(() => setReportVitals(true), { timeout: 3000 });
-      } else {
-        timer = window.setTimeout(() => setReportVitals(true), 500);
-      }
-    };
-    if (document.readyState === "complete") enable();
-    else window.addEventListener("load", enable, { once: true });
-    return () => {
-      window.removeEventListener("load", enable);
-      if (idle) cancelIdleCallback(idle);
-      window.clearTimeout(timer);
-    };
+    setReportVitals(!trackingDisabled());
   }, []);
 
   useEffect(() => {
@@ -82,5 +67,5 @@ export default function Analytics() {
     };
   }, [pathname]);
 
-  return reportVitals ? <Suspense fallback={null}><WebVitals /></Suspense> : null;
+  return reportVitals ? <WebVitals /> : null;
 }
