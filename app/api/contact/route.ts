@@ -1,6 +1,7 @@
 import { Resend } from "resend";
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { saveInquiry, type NewInquiry } from "@/lib/db";
+import { forwardToErp, syncPendingToErp } from "@/lib/erp";
 import { clientIp, rateLimit, TOO_MANY } from "@/lib/rate-limit";
 import { EMAIL_RE } from "@/lib/site";
 
@@ -149,7 +150,16 @@ export async function POST(req: Request) {
   }
 
   // Stored for the admin, then emailed: the request is lost only if both fail.
-  const saved = await saveInquiry(inquiry);
+  const receivedAt = new Date();
+  const savedId = await saveInquiry(inquiry);
+  const saved = savedId !== null;
+  // Then into the ERP's "Demandes du site" queue, once the visitor has their answer -- along with any
+  // earlier request the ERP couldn't take at the time.
+  const forwarded = inquiry;
+  after(async () => {
+    await forwardToErp(savedId, forwarded, receivedAt);
+    await syncPendingToErp();
+  });
   let emailed = false;
   try {
     if (!process.env.RESEND_API_KEY) throw new Error("RESEND_API_KEY is not set");

@@ -22,6 +22,11 @@ CREATE TABLE IF NOT EXISTS inquiries (
 );
 CREATE INDEX IF NOT EXISTS inquiries_kind_created_idx ON inquiries (kind, created_at DESC);
 CREATE INDEX IF NOT EXISTS inquiries_status_idx ON inquiries (status) WHERE status = 'new';
+-- Transmission à l'ERP (lib/erp.ts) : null tant que l'ERP n'a pas confirmé la réception ; les demandes
+-- en échec sont renvoyées par syncPendingToErp, avec un nombre d'essais borné.
+ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS erp_synced_at timestamptz;
+ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS erp_sync_attempts integer NOT NULL DEFAULT 0;
+CREATE INDEX IF NOT EXISTS inquiries_erp_pending_idx ON inquiries (created_at) WHERE erp_synced_at IS NULL;
 
 -- Mesure d'audience maison, sans cookie : `visitor` est un hash quotidien (IP + navigateur + sel),
 -- impossible à relier d'un jour à l'autre ou à une personne.

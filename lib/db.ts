@@ -31,17 +31,18 @@ export type Inquiry = {
 
 export type NewInquiry = Pick<Inquiry, "kind" | "name" | "email" | "phone" | "organisation" | "subject" | "message" | "details">;
 
-/** Stores a form submission; never throws, so a database outage doesn't block the email. */
-export async function saveInquiry(i: NewInquiry) {
+/** Stores a form submission and returns its id; never throws, so a database outage doesn't block the email. */
+export async function saveInquiry(i: NewInquiry): Promise<string | null> {
   const sql = db();
-  if (!sql) return false;
+  if (!sql) return null;
   try {
-    await sql`INSERT INTO inquiries (kind, name, email, phone, organisation, subject, message, details)
+    const rows = await sql`INSERT INTO inquiries (kind, name, email, phone, organisation, subject, message, details)
       VALUES (${i.kind}, ${i.name}, ${i.email}, ${i.phone || null}, ${i.organisation || null}, ${i.subject || null},
-        ${i.message}, ${JSON.stringify(i.details)}::jsonb)`;
-    return true;
+        ${i.message}, ${JSON.stringify(i.details)}::jsonb)
+      RETURNING id`;
+    return String(rows[0].id);
   } catch (error) {
     console.error("saveInquiry failed:", error);
-    return false;
+    return null;
   }
 }

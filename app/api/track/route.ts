@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { visitorCountry } from "@/lib/geo";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { purgeExpiredData } from "@/lib/retention";
+import { syncPendingToErp } from "@/lib/erp";
 import { deriveKey } from "@/lib/keys";
 import { SITE_URL, TIMEZONE } from "@/lib/site";
 
@@ -51,6 +52,8 @@ export async function POST(request: Request) {
   if (!(await rateLimit(`track:${clientIp(request.headers)}`, 120, 60))) return new Response(null, { status: 204 });
   // Retention purge now and then, so expired data goes even on weeks without a visit to the admin.
   if (Math.random() < 0.02) after(purgeExpiredData);
+  // Requests the ERP missed are sent again now and then, without waiting for the next form or the daily cron.
+  if (Math.random() < 0.05) after(() => syncPendingToErp());
 
   const vital = body?.vital;
   const vitalName = typeof vital?.name === "string" ? vital.name : "";

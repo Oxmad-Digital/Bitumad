@@ -53,3 +53,8 @@ comptes se créent ensuite depuis la page Comptes de l'admin.
 Chaque formulaire (`/api/contact`) est enregistré en base puis envoyé par email : une demande n'est
 perdue que si les deux échouent. Les demandes sont supprimées automatiquement après 3 ans
 (`lib/retention.ts`, durée annoncée dans les mentions légales).
+
+Chaque demande est aussi transmise à l'ERP (file « Demandes du site ») quand `ERP_INBOUND_URL` et
+`ERP_INBOUND_SECRET` sont définies (`lib/erp.ts`). Une demande que l'ERP n'a pas confirmée est renvoyée
+après le formulaire suivant, de temps en temps après une visite, à l'ouverture de l'admin (qui le signale)
+et chaque jour par la tâche planifiée `/api/cron/erp-sync` (`vercel.json`, `CRON_SECRET`), pendant 7 jours.
