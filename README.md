@@ -58,3 +58,7 @@ Chaque demande est aussi transmise à l'ERP (file « Demandes du site ») quand 
 `ERP_INBOUND_SECRET` sont définies (`lib/erp.ts`). Une demande que l'ERP n'a pas confirmée est renvoyée
 après le formulaire suivant, de temps en temps après une visite, à l'ouverture de l'admin (qui le signale)
 et chaque jour par la tâche planifiée `/api/cron/erp-sync` (`vercel.json`, `CRON_SECRET`), pendant 7 jours.
+
+L'ERP relève chaque nuit les visites du mois sur `/api/oxmad/usage?month=AAAA-MM` (suivi de la
+maintenance) : visiteurs uniques par jour, additionnés sur le mois, totaux seulement. La route exige
+`Authorization: Bearer $OXMAD_USAGE_TOKEN` (jeton copié depuis l'ERP) et répond 401 sans lui.
