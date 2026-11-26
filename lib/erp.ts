@@ -8,8 +8,8 @@ import { db, type NewInquiry } from "@/lib/db";
  * request.
  *
  * Each stored request keeps `erp_synced_at` null until the ERP confirms it. One the ERP couldn't take
- * (down, cold start timing out...) is sent again by syncPendingToErp, which runs after every form, now
- * and then after a page view, when the admin opens, and once a day (vercel.json). The ERP stores a
+ * (down, cold start timing out...) is sent again by syncPendingToErp, which runs after forms,
+ * when the admin opens, and once a day (vercel.json). The ERP stores a
  * request once per `externalId`, so sending it twice is harmless.
  */
 

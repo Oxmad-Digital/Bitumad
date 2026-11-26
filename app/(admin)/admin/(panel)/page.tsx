@@ -82,7 +82,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         <h1>Statistiques</h1>
         <div className="adm-segmented" role="group" aria-label="Période">
           {PERIODS.map((p) => (
-            <Link key={p} href={`/admin?p=${p}`} aria-current={p === period ? "true" : undefined}>{periodLabel(p)}</Link>
+            <Link key={p} href={`/admin?p=${p}`} prefetch={false} aria-current={p === period ? "true" : undefined}>{periodLabel(p)}</Link>
           ))}
         </div>
       </div>
@@ -152,6 +152,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       </div>
 
       <p className="adm-footnote">
+        Les statistiques d&apos;audience et de performance sont mises à jour chaque nuit.
         Mesure interne sans cookie : un visiteur est compté une fois par jour (empreinte pseudonyme renouvelée chaque jour, ignorée si le navigateur envoie Global Privacy Control ou Do Not Track).
         Une session regroupe les pages vues d&apos;un visiteur sans 30 min d&apos;inactivité ; sa durée ne compte que le temps onglet visible.
         Les robots, l&apos;admin et le développement local ne sont pas comptés.

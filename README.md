@@ -52,14 +52,30 @@ La même commande réinitialise le mot de passe d'un compte existant (mot de pas
 comptes se créent ensuite depuis la page Comptes de l'admin.
 
 Chaque formulaire (`/api/contact`) est enregistré en base puis envoyé par email : une demande n'est
-perdue que si les deux échouent. Les demandes sont supprimées automatiquement après 3 ans
-(`lib/retention.ts`, durée annoncée dans les mentions légales).
+perdue que si les deux échouent. Le cron des statistiques supprime les demandes de plus de 3 ans,
+selon la durée annoncée dans les mentions légales.
 
 Chaque demande est aussi transmise à l'ERP (file « Demandes du site ») quand `ERP_INBOUND_URL` et
 `ERP_INBOUND_SECRET` sont définies (`lib/erp.ts`). Une demande que l'ERP n'a pas confirmée est renvoyée
-après le formulaire suivant, de temps en temps après une visite, à l'ouverture de l'admin (qui le signale)
+après le formulaire suivant, à l'ouverture de l'admin (qui le signale)
 et chaque jour par la tâche planifiée `/api/cron/erp-sync` (`vercel.json`, `CRON_SECRET`), pendant 7 jours.
 
-L'ERP relève chaque nuit les visites du mois sur `/api/oxmad/usage?month=AAAA-MM` (suivi de la
-maintenance) : visiteurs uniques par jour, additionnés sur le mois, totaux seulement. La route exige
-`Authorization: Bearer $OXMAD_USAGE_TOKEN` (jeton copié depuis l'ERP) et répond 401 sans lui.
+### Statistiques d'audience
+
+Le navigateur regroupe les pages vues, les durées et les Web Vitals. `/api/track` écrit ces lots dans
+un bucket Cloudflare R2 privé. Le cron `/api/cron/analytics` est prévu à 00 h 15 à Madagascar
+(`15 21 * * *` UTC, déclenchement dans l'heure sur Vercel Hobby). Il importe les journées terminées,
+agrège les visites et purge les données expirées en une transaction HTTP Neon. Il publie ensuite
+le relevé mensuel et retire les lots importés de R2. L'admin affiche les statistiques de la dernière
+collecte nocturne et lit Neon quand on consulte le tableau de bord.
+
+1. Créer un bucket **R2 Standard privé** dédié à l'audience avec un jeton S3 de lecture et écriture
+   limité à ce bucket. Configurer `R2_ANALYTICS_BUCKET`, `R2_ENDPOINT`, `R2_ACCESS_KEY_ID` et
+   `R2_SECRET_ACCESS_KEY` dans Vercel, avec `CRON_SECRET`. La limitation de débit de `/api/track`
+   s'applique par instance. Une règle Vercel WAF peut appliquer un plafond commun par IP.
+2. Appliquer `npm run db:setup` à la base de production avant le déploiement. Après le
+   déploiement, lancer le cron une première fois depuis Vercel pour publier le relevé historique.
+
+L'ERP lit le dernier relevé disponible sur `/api/oxmad/usage?month=AAAA-MM` à partir de R2. Le relevé
+additionne les visiteurs uniques de chaque journée du mois. La route exige
+`Authorization: Bearer $OXMAD_USAGE_TOKEN` (jeton copié depuis l'ERP) et répond 503 jusqu'au premier import.

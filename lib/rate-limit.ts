@@ -1,10 +1,7 @@
 import "server-only";
 import { db } from "./db";
 
-/** Caller address: Vercel sets these headers itself, so a client can't forge them there. */
-export function clientIp(headers: Headers) {
-  return (headers.get("x-real-ip") || headers.get("x-forwarded-for") || "").split(",")[0].trim() || "unknown";
-}
+export { clientIp } from "./client-ip";
 
 /**
  * Fixed-window counter in the database. Returns false once `key` has been hit more than `limit`

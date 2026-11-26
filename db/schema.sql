@@ -62,8 +62,8 @@ CREATE TABLE IF NOT EXISTS web_vitals (
 CREATE INDEX IF NOT EXISTS web_vitals_path_name_created_idx ON web_vitals (path, name, created_at DESC);
 CREATE INDEX IF NOT EXISTS web_vitals_created_idx ON web_vitals (created_at);
 
--- Agrégats quotidiens, conservés sans limite. Chaque journée terminée de page_views y est résumée
--- puis supprimée (voir lib/admin-stats.ts) : la base grossit de quelques dizaines de lignes par jour au plus.
+-- Agrégats quotidiens, conservés sans limite. Le cron charge les journées terminées depuis R2
+-- et résume puis supprime les lignes de page_views dans la même transaction.
 -- Le hash visiteur changeant chaque jour, additionner les visiteurs quotidiens donne le même total qu'avant.
 CREATE TABLE IF NOT EXISTS page_views_daily (
   day     date NOT NULL,
@@ -88,6 +88,11 @@ CREATE TABLE IF NOT EXISTS sessions_daily (
   day       date PRIMARY KEY,
   sessions  integer NOT NULL,
   duration  bigint NOT NULL
+);
+
+-- Une journée R2 est importée une seule fois, même si sa suppression d'objets doit être retentée.
+CREATE TABLE IF NOT EXISTS analytics_import_days (
+  day date PRIMARY KEY
 );
 
 -- Comptes de l'espace admin. Mot de passe haché en scrypt (voir lib/password.ts), jamais stocké en clair.

@@ -1,17 +1,31 @@
 import { createHash } from "node:crypto";
-import { after } from "next/server";
-import { db } from "@/lib/db";
+import { analyticsBucket, analyticsDay, type AnalyticsEvent } from "@/lib/analytics-buffer";
+import { clientIp } from "@/lib/client-ip";
 import { visitorCountry } from "@/lib/geo";
-import { clientIp, rateLimit } from "@/lib/rate-limit";
-import { purgeExpiredData } from "@/lib/retention";
-import { syncPendingToErp } from "@/lib/erp";
 import { deriveKey } from "@/lib/keys";
-import { SITE_URL, TIMEZONE } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
 
 const BOT_RE = /bot|crawl|spider|slurp|preview|lighthouse|headless|curl|wget|python|axios|node-fetch/i;
 // Never hash without a salt: without ANALYTICS_SALT, one is derived from the admin session secret.
 const SALT = process.env.ANALYTICS_SALT || (process.env.ADMIN_SESSION_SECRET ? deriveKey("analytics", process.env.ADMIN_SESSION_SECRET).toString("hex") : "");
 const SITE_HOST = new URL(SITE_URL).hostname.replace(/^www\./, "");
+const VIEW_ID_RE = /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i;
+const MAX_PAYLOAD_BYTES = 24 * 1024;
+const MAX_EVENTS = 20;
+const requestCounts = new Map<string, number>();
+let currentMinute = 0;
+
+function allowBatch(ip: string, now: number) {
+  const minute = Math.floor(now / 60_000);
+  if (minute !== currentMinute) {
+    requestCounts.clear();
+    currentMinute = minute;
+  }
+  const count = requestCounts.get(ip) ?? 0;
+  if (count >= 120 || (count === 0 && requestCounts.size >= 10_000)) return false;
+  requestCounts.set(ip, count + 1);
+  return true;
+}
 
 function device(ua: string) {
   if (/ipad|tablet|(android(?!.*mobile))/i.test(ua)) return "Tablette";
@@ -39,63 +53,85 @@ function referrerHost(value: unknown) {
   }
 }
 
-/** Cookieless page-view beacon (or, with `seconds`, the time spent on it). The visitor id is a daily salted hash: unique visitors per day, nothing more. */
+function cleanString(value: string, limit: number) {
+  return value.replaceAll("\0", "").slice(0, limit).toWellFormed();
+}
+
+function cleanEvent(input: unknown, now: Date, day: string, visitor: string, ua: string, ipCountry: string | null): AnalyticsEvent | null {
+  if (!input || typeof input !== "object") return null;
+  const body = input as Record<string, unknown>;
+  const path = typeof body.path === "string" ? cleanString(body.path, 300) : "";
+  if (!path.startsWith("/") || path.startsWith("/admin")) return null;
+
+  const timestamp = typeof body.at === "number" ? body.at : NaN;
+  const reportedAt = timestamp >= now.getTime() - 30_000 && timestamp <= now.getTime() ? new Date(timestamp) : now;
+  const at = (analyticsDay(reportedAt) === day ? reportedAt : now).toISOString();
+  if (body.vital !== undefined) {
+    if (!body.vital || typeof body.vital !== "object") return null;
+    const { id, name, value, rating, navigationType } = body.vital as Record<string, unknown>;
+    if (typeof id !== "string" || typeof name !== "string" || !["LCP", "INP", "CLS"].includes(name)
+      || typeof value !== "number" || !Number.isFinite(value) || value < 0) return null;
+    const metricId = cleanString(id, 100);
+    if (!metricId) return null;
+    return {
+      type: "vital", at, path, id: metricId, name, value, device: device(ua),
+      rating: rating === "good" || rating === "needs-improvement" || rating === "poor" ? rating : null,
+      navigation: typeof navigationType === "string" ? cleanString(navigationType, 32) : null,
+    };
+  }
+
+  const viewId = typeof body.viewId === "string" && VIEW_ID_RE.test(body.viewId) ? body.viewId : null;
+  if (body.seconds !== undefined) {
+    if (typeof body.seconds !== "number" || !Number.isFinite(body.seconds) || body.seconds < 1) return null;
+    return { type: "duration", at, path, visitor, viewId, seconds: Math.min(Math.round(body.seconds), 1_800) };
+  }
+  const country = visitorCountry(body.tz, ipCountry);
+  return {
+    type: "view", at, path, visitor, viewId, referrer: referrerHost(body.referrer),
+    utm: typeof body.utm === "string" ? cleanString(body.utm, 100) || null : null,
+    country: typeof country === "string" && /^[A-Z]{2}$/.test(country) ? country : null,
+    device: device(ua), browser: browser(ua),
+  };
+}
+
+/** Stores browser batches in the private R2 buffer. Also accepts beacons from already-open tabs. */
 export async function POST(request: Request) {
-  const sql = db();
   const ua = request.headers.get("user-agent") || "";
-  const body = await request.json().catch(() => null);
-  const path = typeof body?.path === "string" ? body.path.slice(0, 300) : "";
-
-  if (!sql || !SALT || !path.startsWith("/") || path.startsWith("/admin") || BOT_RE.test(ua)) {
-    return new Response(null, { status: 204 });
-  }
-  if (!(await rateLimit(`track:${clientIp(request.headers)}`, 120, 60))) return new Response(null, { status: 204 });
-  // Retention purge now and then, so expired data goes even on weeks without a visit to the admin.
-  if (Math.random() < 0.02) after(purgeExpiredData);
-  // Requests the ERP missed are sent again now and then, without waiting for the next form or the daily cron.
-  if (Math.random() < 0.05) after(() => syncPendingToErp());
-
-  const vital = body?.vital;
-  const vitalName = typeof vital?.name === "string" ? vital.name : "";
-  const vitalValue = Number(vital?.value);
-  if (["LCP", "INP", "CLS"].includes(vitalName) && Number.isFinite(vitalValue) && vitalValue >= 0) {
-    const id = typeof vital.id === "string" ? vital.id.slice(0, 100) : "";
-    if (!id) return new Response(null, { status: 204 });
-    const rating = ["good", "needs-improvement", "poor"].includes(vital.rating) ? vital.rating : null;
-    const navigation = typeof vital.navigationType === "string" ? vital.navigationType.slice(0, 32) : null;
-    try {
-      await sql`INSERT INTO web_vitals (metric_id, path, name, value, rating, navigation_type, device)
-        VALUES (${id}, ${path}, ${vitalName}, ${vitalValue}, ${rating}, ${navigation}, ${device(ua)})
-        ON CONFLICT (metric_id) DO UPDATE SET value = EXCLUDED.value, rating = EXCLUDED.rating`;
-    } catch (error) {
-      console.error("web vital tracking failed:", error);
-    }
-    return new Response(null, { status: 204 });
-  }
+  const fetchSite = request.headers.get("sec-fetch-site");
+  if (!SALT || BOT_RE.test(ua) || request.headers.get("sec-gpc") === "1" || request.headers.get("dnt") === "1"
+    || fetchSite === "cross-site" || fetchSite === "same-site") return new Response(null, { status: 204 });
 
   const ip = clientIp(request.headers);
-  const day = new Date().toLocaleDateString("en-CA", { timeZone: TIMEZONE });
-  const visitor = createHash("sha256")
-    .update(`${SALT}|${day}|${ip}|${ua}`)
-    .digest("base64url")
-    .slice(0, 22);
-  const utm = typeof body?.utm === "string" ? body.utm.slice(0, 100) : null;
-  const seconds = Number(body?.seconds);
+  if (!allowBatch(ip, Date.now())) return new Response(null, { status: 429 });
+  if (Number(request.headers.get("content-length")) > MAX_PAYLOAD_BYTES) return new Response(null, { status: 413 });
+  const raw = await request.text().catch(() => "");
+  if (Buffer.byteLength(raw) > MAX_PAYLOAD_BYTES) return new Response(null, { status: 413 });
 
+  let body: unknown;
   try {
-    if (Number.isFinite(seconds)) {
-      // Engaged-time beacon: credited to this visitor's latest view of the page, capped at 30 min per view.
-      if (seconds > 0) {
-        await sql`UPDATE page_views SET duration = least(coalesce(duration, 0) + ${Math.round(seconds)}, 1800)
-          WHERE id = (SELECT id FROM page_views WHERE visitor = ${visitor} AND path = ${path} ORDER BY id DESC LIMIT 1)`;
-      }
-    } else {
-      await sql`INSERT INTO page_views (path, referrer, utm_source, visitor, country, device, browser, duration)
-        VALUES (${path}, ${referrerHost(body?.referrer)}, ${utm || null}, ${visitor},
-          ${visitorCountry(body?.tz, request.headers.get("x-vercel-ip-country"))}, ${device(ua)}, ${browser(ua)}, 0)`;
-    }
-  } catch (error) {
-    console.error("track failed:", error);
+    body = JSON.parse(raw);
+  } catch {
+    return new Response(null, { status: 400 });
   }
-  return new Response(null, { status: 204 });
+  if (Array.isArray(body) && body.length > MAX_EVENTS) return new Response(null, { status: 413 });
+
+  const now = new Date();
+  const day = analyticsDay(now);
+  const visitor = createHash("sha256").update(`${SALT}|${day}|${ip}|${ua}`).digest("base64url").slice(0, 22);
+  const country = request.headers.get("x-vercel-ip-country");
+  const events = (Array.isArray(body) ? body : [body]).flatMap((input) => {
+    const event = cleanEvent(input, now, day, visitor, ua, country);
+    return event ? [event] : [];
+  });
+  if (!events.length) return new Response(null, { status: 204 });
+
+  const bucket = analyticsBucket();
+  if (!bucket) return new Response(null, { status: 503 });
+  try {
+    await bucket.write(day, events);
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    console.error("Analytics buffer write failed:", error);
+    return new Response(null, { status: 503 });
+  }
 }

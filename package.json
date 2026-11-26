@@ -11,6 +11,7 @@
     "admin:create": "node --network-family-autoselection-attempt-timeout=3000 --env-file=.env.local scripts/create-admin.mts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1169.0",
     "@neondatabase/serverless": "^1.2.0",
     "@react-pdf/renderer": "^4.5.1",
     "lucide-react": "^1.6.0",

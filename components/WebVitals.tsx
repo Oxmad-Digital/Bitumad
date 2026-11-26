@@ -1,6 +1,7 @@
 "use client";
 
 import { useReportWebVitals } from "next/web-vitals";
+import { queueAnalytics } from "./analytics-events";
 
 type ReportWebVitalsCallback = Parameters<typeof useReportWebVitals>[0];
 const CORE_VITALS = new Set(["LCP", "INP", "CLS"]);
@@ -9,8 +10,8 @@ const CORE_VITALS = new Set(["LCP", "INP", "CLS"]);
 // already available metrics again. The endpoint also upserts by metric id.
 const reportWebVital: ReportWebVitalsCallback = (metric) => {
   if (!CORE_VITALS.has(metric.name)) return;
-  const payload = JSON.stringify({
-    path: location.pathname,
+  queueAnalytics({
+    path: location.pathname.slice(0, 300),
     vital: {
       id: metric.id,
       name: metric.name,
@@ -19,10 +20,6 @@ const reportWebVital: ReportWebVitalsCallback = (metric) => {
       navigationType: metric.navigationType,
     },
   });
-  const blob = new Blob([payload], { type: "application/json" });
-  if (!navigator.sendBeacon?.("/api/track", blob)) {
-    fetch("/api/track", { method: "POST", body: payload, keepalive: true }).catch(() => {});
-  }
 };
 
 export default function WebVitals() {
