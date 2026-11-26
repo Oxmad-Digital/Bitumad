@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
@@ -8,9 +9,14 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [bitumesOpen, setBitumesOpen] = useState(false);
 
+  function closeNavigation() {
+    setOpen(false);
+    setBitumesOpen(false);
+  }
+
   return (
     <nav className="nav">
-      <a href="/" className="nav-logo">
+      <Link href="/" className="nav-logo" onNavigate={closeNavigation}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://media.bitumad.mg/bitumad_logo_remove_rectangle_dark_qguxh1.webp"
@@ -23,10 +29,10 @@ export default function Navbar() {
           alt="Bitumad"
           className="nav-logo-img nav-logo-img--light"
         />
-      </a>
+      </Link>
 
       <ul className="nav-links">
-        <li><a href="/">Accueil</a></li>
+        <li><Link href="/" onNavigate={closeNavigation}>Accueil</Link></li>
         <li><a href="/a-propos">À propos</a></li>
         <li className="nav-dropdown-item">
           <a href="/notre-bitume" className="nav-dropdown-trigger" aria-haspopup="true">
@@ -53,7 +59,7 @@ export default function Navbar() {
 
       <div className="nav-cta-group">
         <ThemeToggle />
-        <a href="/#devis" className="nav-cmd">Obtenir un devis</a>
+        <Link href="/#devis" className="nav-cmd" onNavigate={closeNavigation}>Obtenir un devis</Link>
 
         <button
           className="nav-hamburger"
@@ -67,7 +73,7 @@ export default function Navbar() {
 
       {open && (
         <div className="nav-mobile">
-          <a href="/" onClick={() => setOpen(false)}>Accueil</a>
+          <Link href="/" onNavigate={closeNavigation}>Accueil</Link>
           <a href="/a-propos" onClick={() => setOpen(false)}>À propos</a>
           <button
             className="nav-mobile-group-btn"
@@ -89,7 +95,7 @@ export default function Navbar() {
               </a>
             </div>
           )}
-          <a href="/#devis" className="nav-cmd" onClick={() => setOpen(false)}>Obtenir un devis</a>
+          <Link href="/#devis" className="nav-cmd" onNavigate={closeNavigation}>Obtenir un devis</Link>
           <a href="/contact" className="nav-cta" onClick={() => setOpen(false)}>Contact</a>
         </div>
       )}

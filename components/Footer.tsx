@@ -1,7 +1,9 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer>
-      <a href="/" className="footer-logo">
+      <Link href="/" className="footer-logo">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://media.bitumad.mg/bitumad_logo_remove_rectangle_dark_qguxh1.webp"
@@ -14,7 +16,7 @@ export default function Footer() {
           alt="Bitumad"
           className="footer-logo-img footer-logo-img--light"
         />
-      </a>
+      </Link>
       <span className="footer-credit">
         Réalisé par{" "}
         <a href="https://oxmad-digital.mg" target="_blank" rel="nofollow noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>

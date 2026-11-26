@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { fontVariables } from "@/lib/fonts";
 import "./(site)/globals.css";
+import styles from "./global-not-found.module.css";
 
 export const metadata: Metadata = {
   title: "Page introuvable – Bitumad",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 export default function GlobalNotFound() {
   return (
     <html lang="fr" className={fontVariables} suppressHydrationWarning>
-      <body>
+      <body className={styles.page}>
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
@@ -23,10 +24,9 @@ export default function GlobalNotFound() {
           }}
         />
         <Navbar />
-        <main id="main-content">
+        <main id="main-content" className={styles.main}>
           <div
             style={{
-              minHeight: "70vh",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",

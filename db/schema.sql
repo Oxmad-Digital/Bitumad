@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS inquiries (
   subject       text,
   message       text NOT NULL DEFAULT '',
   details       jsonb NOT NULL DEFAULT '{}'::jsonb,
-  -- Messages : new → read → archived. Devis : new → in_progress → quoted → won / lost, puis archived.
+  -- Devis et messages : new, read, archived. Les anciens statuts des devis restent acceptés.
   status        text NOT NULL DEFAULT 'new'
     CHECK (status IN ('new', 'read', 'in_progress', 'quoted', 'won', 'lost', 'archived')),
   -- Note interne de l'équipe (suivi du devis), jamais visible du demandeur.

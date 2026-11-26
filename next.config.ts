@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: __dirname,
+  },
   experimental: {
     // app/global-not-found.tsx: the 404 page shared by the site and admin root layouts.
     globalNotFound: true,

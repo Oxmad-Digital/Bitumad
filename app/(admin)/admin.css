@@ -303,7 +303,6 @@ a.adm-card:hover { border-color: var(--muted); }
 
 /* ─── Bitumad : demandes (devis, messages) ─── */
 .adm-segmented { flex-wrap: wrap; }
-.adm-segmented a .adm-count { margin-left: 6px; color: var(--muted); font-family: var(--font-data); font-size: 11.5px; }
 .adm-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
 .adm-search { display: flex; gap: 8px; flex: 1; min-width: 220px; max-width: 420px; }
 .adm-search input { flex: 1; min-width: 0; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--white); }

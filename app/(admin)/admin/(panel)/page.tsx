@@ -106,7 +106,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         <Link href="/admin/devis" className="adm-card adm-kpi">
           <p className="adm-kpi-label">Demandes de devis</p>
           <p className="adm-kpi-value">{nf.format(stats.quotes)}</p>
-          <span className="adm-muted">{stats.newQuotes} à traiter · {stats.wonQuotes} gagnée{stats.wonQuotes > 1 ? "s" : ""}</span>
+          <span className="adm-muted">{stats.newQuotes} non vue{stats.newQuotes > 1 ? "s" : ""}</span>
         </Link>
         <Link href="/admin/messages" className="adm-card adm-kpi">
           <p className="adm-kpi-label">Messages reçus</p>

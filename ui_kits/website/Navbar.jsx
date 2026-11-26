@@ -1,4 +1,5 @@
 /* Bitumad website — Navbar (with mobile menu) */
+/* eslint @next/next/no-img-element: off -- This standalone demo runs without Next.js. */
 const { useState } = React;
 
 const LOGO_SIMPLE = "../../assets/bitumad-logo-simple.webp";

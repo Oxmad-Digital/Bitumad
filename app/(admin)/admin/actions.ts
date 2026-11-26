@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 import { hashPassword, MIN_PASSWORD_LENGTH, verifyPassword } from "@/lib/password";
 import { clientIp, rateLimit, TOO_MANY } from "@/lib/rate-limit";
 import { EMAIL_RE } from "@/lib/site";
-import { MESSAGE_STATUSES, QUOTE_STATUSES } from "@/lib/admin-stats";
+import { MESSAGE_STATUSES } from "@/lib/admin-stats";
 import { MAINTENANCE_TAG } from "@/lib/maintenance";
 
 
@@ -48,16 +48,33 @@ function sql() {
   return client;
 }
 
-/** Status change of a quote request or a message; only the statuses of its kind are accepted. */
-export async function setInquiryStatus(formData: FormData) {
+export async function markQuoteViewed(formData: FormData) {
+  await requireAdmin();
+  const id = rowId(formData);
+  if (!id) return;
+  await sql()`UPDATE inquiries SET status = 'read', updated_at = now()
+    WHERE id = ${id} AND kind = 'devis' AND status = 'new'`;
+  revalidatePath("/admin", "layout");
+}
+
+export async function setQuoteArchived(archived: boolean, formData: FormData) {
+  await requireAdmin();
+  const id = rowId(formData);
+  if (!id) return;
+  await sql()`UPDATE inquiries SET status = ${archived ? "archived" : "read"}, updated_at = now()
+    WHERE id = ${id} AND kind = 'devis' AND (status = 'archived') = ${!archived}`;
+  revalidatePath("/admin", "layout");
+}
+
+export async function setMessageStatus(formData: FormData) {
   await requireAdmin();
   const status = String(formData.get("status"));
   const id = rowId(formData);
   if (!id) return;
-  const allowed: readonly string[] = formData.get("kind") === "devis" ? QUOTE_STATUSES : MESSAGE_STATUSES;
+  const allowed: readonly string[] = MESSAGE_STATUSES;
   if (!allowed.includes(status)) return;
   await sql()`UPDATE inquiries SET status = ${status}, updated_at = now()
-    WHERE id = ${id} AND (kind = 'devis') = ${formData.get("kind") === "devis"}`;
+    WHERE id = ${id} AND kind <> 'devis'`;
   revalidatePath("/admin", "layout");
 }
 
@@ -71,11 +88,11 @@ export async function saveInquiryNote(formData: FormData) {
   revalidatePath("/admin", "layout");
 }
 
-export async function deleteInquiry(formData: FormData) {
+export async function deleteInquiry(isQuote: boolean, formData: FormData) {
   await requireAdmin();
   const id = rowId(formData);
   if (!id) return;
-  await sql()`DELETE FROM inquiries WHERE id = ${id}`;
+  await sql()`DELETE FROM inquiries WHERE id = ${id} AND (kind = 'devis') = ${isQuote}`;
   revalidatePath("/admin", "layout");
 }
 

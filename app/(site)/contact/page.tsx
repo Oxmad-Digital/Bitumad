@@ -340,9 +340,9 @@ export default function ContactPage() {
           <h2>PRÊT À DÉMARRER<br />VOTRE PROJET ?</h2>
           <p>Demandez votre devis personnalisé dès maintenant.</p>
         </div>
-        <a href="/#devis" className="cta-banner-btn">
+        <Link href="/#devis" className="cta-banner-btn">
           Obtenir un devis
-        </a>
+        </Link>
       </div>
     </>
   );

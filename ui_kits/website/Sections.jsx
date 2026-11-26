@@ -66,8 +66,8 @@ function About() {
       <h2 className="section-title reveal reveal-delay-1">VOTRE PARTENAIRE<br />EN BITUME</h2>
       <div className="about-grid">
         <div className="about-body reveal reveal-delay-2">
-          <p>Bitumad est une entreprise spécialisée dans la fourniture de bitume à Madagascar. Nous proposons un bitume de pénétration 60/70, conforme aux normes internationales, idéal pour la construction et l'entretien des routes.</p>
-          <p>Nos produits s'adressent aussi bien aux institutions publiques, aux entreprises de BTP qu'aux particuliers, garantissant qualité, durabilité et performance pour vos projets.</p>
+          <p>Bitumad est une entreprise spécialisée dans la fourniture de bitume à Madagascar. Nous proposons un bitume de pénétration 60/70, conforme aux normes internationales, idéal pour la construction et l&apos;entretien des routes.</p>
+          <p>Nos produits s&apos;adressent aussi bien aux institutions publiques, aux entreprises de BTP qu&apos;aux particuliers, garantissant qualité, durabilité et performance pour vos projets.</p>
         </div>
         <div className="features-grid reveal reveal-delay-3">
           {FEATURES.map((f) => (
@@ -103,7 +103,7 @@ function SpecSheet() {
           <h2 className="section-title reveal reveal-delay-1">FICHE TECHNIQUE<br />BITUME 60/70</h2>
         </div>
         <p className="section-lead reveal reveal-delay-2" style={{ maxWidth: "340px", textAlign: "right" }}>
-          Caractéristiques conformes aux normes ASTM pour la construction et l'entretien des routes à Madagascar.
+          Caractéristiques conformes aux normes ASTM pour la construction et l&apos;entretien des routes à Madagascar.
         </p>
       </div>
       <div className="reveal reveal-delay-2">
@@ -132,7 +132,7 @@ const STEPS = [
   { n: "03", title: "Livraison sur site", desc: "Nous organisons la logistique et assurons le transport directement jusqu'à votre chantier, partout à Madagascar." },
 ];
 
-function Process({ onNav }) {
+function Process() {
   return (
     <section className="section section--dark" id="commander">
       <div className="eyebrow reveal">Commander</div>

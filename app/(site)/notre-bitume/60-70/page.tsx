@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 import "../notre-bitume.css";
 
@@ -193,10 +194,10 @@ export default function Bitume6070Page() {
         <div className="nb-desc-layout">
           <div>
             <div className="nb-desc-body reveal reveal-delay-2">
-              <p>Le <strong>bitume de pénétration 60/70</strong> est un liant hydrocarboné visqueux issu de la distillation du pétrole brut. Il se présente sous forme solide à température ambiante et devient fluide sous l'effet de la chaleur, permettant son application sur les chaussées.</p>
-              <p>La désignation <strong>60/70</strong> correspond à l'indice de pénétrabilité du produit : une aiguille standard de 100 grammes pénètre entre 60 et 70 dixièmes de millimètre dans le bitume à 25 °C pendant 5 secondes. Cet indice détermine la consistance du produit — plus le chiffre est bas, plus le bitume est dur.</p>
+              <p>Le <strong>bitume de pénétration 60/70</strong> est un liant hydrocarboné visqueux issu de la distillation du pétrole brut. Il se présente sous forme solide à température ambiante et devient fluide sous l&apos;effet de la chaleur, permettant son application sur les chaussées.</p>
+              <p>La désignation <strong>60/70</strong> correspond à l&apos;indice de pénétrabilité du produit : une aiguille standard de 100 grammes pénètre entre 60 et 70 dixièmes de millimètre dans le bitume à 25 °C pendant 5 secondes. Cet indice détermine la consistance du produit — plus le chiffre est bas, plus le bitume est dur.</p>
               <p>Ce grade est particulièrement adapté aux <strong>conditions climatiques tropicales</strong> comme celles de Madagascar : il offre une résistance suffisante aux hautes températures estivales pour éviter les ornières, tout en conservant une flexibilité adéquate lors des variations saisonnières pour prévenir la fissuration.</p>
-              <p>Le bitume 60/70 est utilisé en enrobage d'agrégats pour constituer les couches de roulement, les couches de liaison et les couches de base des structures de chaussées. Il peut également être employé en <strong>enduit superficiel</strong> pour le traitement de surface des routes à faible trafic.</p>
+              <p>Le bitume 60/70 est utilisé en enrobage d&apos;agrégats pour constituer les couches de roulement, les couches de liaison et les couches de base des structures de chaussées. Il peut également être employé en <strong>enduit superficiel</strong> pour le traitement de surface des routes à faible trafic.</p>
             </div>
           </div>
 
@@ -219,7 +220,7 @@ export default function Bitume6070Page() {
                 </div>
               ))}
             </div>
-            <div className="nb-composition-footer">Valeurs conformes au certificat d'analyse lot par lot</div>
+            <div className="nb-composition-footer">Valeurs conformes au certificat d&apos;analyse lot par lot</div>
           </div>
         </div>
       </section>
@@ -235,7 +236,7 @@ export default function Bitume6070Page() {
           </div>
           <p className="section-lead reveal reveal-delay-2" style={{ maxWidth: "600px", textAlign: "right" }}>
             Caractéristiques conformes aux normes ASTM pour la construction et
-            l'entretien des routes à Madagascar.
+            l&apos;entretien des routes à Madagascar.
           </p>
         </div>
         <div className="spec-table-wrap reveal reveal-delay-2">
@@ -279,7 +280,7 @@ export default function Bitume6070Page() {
 
       {/* ─── APPLICATIONS ─── */}
       <section id="nb-applications" className="nb-section-applications">
-        <div className="nb-eyebrow reveal">Domaines d'application</div>
+        <div className="nb-eyebrow reveal">Domaines d&apos;application</div>
         <h2 className="nb-section-title reveal reveal-delay-1">OÙ UTILISE-T-ON NOTRE BITUME ?</h2>
         <p className="nb-section-lead reveal reveal-delay-2">
           Le bitume 60/70 est adapté à une large gamme de chantiers, des routes nationales aux surfaces spécialisées, partout à Madagascar.
@@ -347,7 +348,7 @@ export default function Bitume6070Page() {
         <div className="nb-download-layout">
           <div className="nb-download-left">
             <p className="nb-section-lead reveal reveal-delay-2">
-              La fiche technique complète du bitume de pénétration 60/70 regroupe l'ensemble des spécifications ASTM, les conditions de transport, de stockage et les recommandations d'application.
+              La fiche technique complète du bitume de pénétration 60/70 regroupe l&apos;ensemble des spécifications ASTM, les conditions de transport, de stockage et les recommandations d&apos;application.
             </p>
             <div className="nb-pdf-includes reveal reveal-delay-3">
               <div className="nb-pdf-includes-title">Contenu du document</div>
@@ -380,7 +381,7 @@ export default function Bitume6070Page() {
               <div className="nb-pdf-meta">
                 <div className="nb-pdf-type">Fiche technique · PDF</div>
                 <div className="nb-pdf-name">Bitume de pénétration 60/70</div>
-                <div className="nb-pdf-desc">Spécifications complètes, méthodes ASTM, conditions de stockage et recommandations d'application pour le marché malgache.</div>
+                <div className="nb-pdf-desc">Spécifications complètes, méthodes ASTM, conditions de stockage et recommandations d&apos;application pour le marché malgache.</div>
                 <div className="nb-pdf-details">
                   <span className="nb-pdf-detail">Format PDF</span>
                   <span className="nb-pdf-detail">Version 2025</span>
@@ -396,7 +397,7 @@ export default function Bitume6070Page() {
                 </svg>
               </div>
               <div className="nb-contact-nudge-text">
-                Besoin d'un certificat d'analyse pour un lot spécifique ?{" "}
+                Besoin d&apos;un certificat d&apos;analyse pour un lot spécifique ?{" "}
                 <a href="/contact">Contactez notre équipe</a> — nous vous le transmettrons sous 48h.
               </div>
             </div>
@@ -419,9 +420,9 @@ export default function Bitume6070Page() {
           <h2>PRÊT À PASSER<br />COMMANDE ?</h2>
           <p>Notre équipe vous accompagne du devis à la livraison sur site.</p>
         </div>
-        <a href="/#commander" className="nb-cta-banner-btn">
+        <Link href="/#commander" className="nb-cta-banner-btn">
           Commander
-        </a>
+        </Link>
       </div>
     </>
   );

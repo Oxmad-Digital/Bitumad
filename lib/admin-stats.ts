@@ -68,7 +68,6 @@ export async function getDashboard(days: Period) {
     sql`SELECT
       (SELECT count(*) FROM inquiries WHERE kind = 'devis' AND (created_at AT TIME ZONE ${TIMEZONE})::date >= ${from}) AS quotes,
       (SELECT count(*) FROM inquiries WHERE kind = 'devis' AND status = 'new') AS new_quotes,
-      (SELECT count(*) FROM inquiries WHERE kind = 'devis' AND status = 'won' AND (created_at AT TIME ZONE ${TIMEZONE})::date >= ${from}) AS won_quotes,
       (SELECT count(*) FROM inquiries WHERE kind <> 'devis' AND (created_at AT TIME ZONE ${TIMEZONE})::date >= ${from}) AS messages,
       (SELECT count(*) FROM inquiries WHERE kind <> 'devis' AND status = 'new') AS unread`,
     sql`SELECT name, percentile_cont(0.75) WITHIN GROUP (ORDER BY value) AS p75, count(*) AS samples
@@ -97,7 +96,6 @@ export async function getDashboard(days: Period) {
     browsers: breakdown(browsers),
     quotes: Number(forms[0].quotes),
     newQuotes: Number(forms[0].new_quotes),
-    wonQuotes: Number(forms[0].won_quotes),
     messages: Number(forms[0].messages),
     unread: Number(forms[0].unread),
     vitals: (["LCP", "INP", "CLS"] as const).map((name) => ({
@@ -108,15 +106,10 @@ export async function getDashboard(days: Period) {
   };
 }
 
-/** Statuses each kind of inquiry goes through (the admin only offers these). */
-export const QUOTE_STATUSES = ["new", "in_progress", "quoted", "won", "lost", "archived"] as const satisfies readonly InquiryStatus[];
 export const MESSAGE_STATUSES = ["new", "read", "archived"] as const satisfies readonly InquiryStatus[];
 
-/**
- * Quote requests (`kind` = devis) or messages (message + partenariat). `status` "open" means every
- * status but archived; a quote filter can also target one status.
- */
-export async function getInquiries(kinds: InquiryKind[], status: InquiryStatus | "open", search = "") {
+/** Quote requests or messages. The "open" inbox excludes archives. */
+export async function getInquiries(kinds: InquiryKind[], status: (typeof MESSAGE_STATUSES)[number] | "open", search = "") {
   const sql = database();
   const q = search.trim().slice(0, 100);
   const pattern = `%${q.replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
@@ -127,11 +120,4 @@ export async function getInquiries(kinds: InquiryKind[], status: InquiryStatus |
         OR coalesce(subject, '') ILIKE ${pattern} OR message ILIKE ${pattern})
     ORDER BY created_at DESC LIMIT 200`;
   return rows as Inquiry[];
-}
-
-/** Number of quote requests per status (for the filter tabs). */
-export async function getQuoteCounts() {
-  const sql = database();
-  const rows = await sql`SELECT status, count(*) AS count FROM inquiries WHERE kind = 'devis' GROUP BY status`;
-  return Object.fromEntries(rows.map((r) => [String(r.status), Number(r.count)])) as Partial<Record<InquiryStatus, number>>;
 }

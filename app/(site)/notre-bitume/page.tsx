@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import "./notre-bitume.css";
 import { useReveal } from "@/hooks/useReveal";
 
@@ -190,9 +191,9 @@ export default function NossBitumesPage() {
           <h2>PRÊT À PASSER<br />COMMANDE ?</h2>
           <p>Notre équipe vous accompagne du devis à la livraison sur site.</p>
         </div>
-        <a href="/#commander" className="nb-cta-banner-btn">
+        <Link href="/#commander" className="nb-cta-banner-btn">
           Obtenir un devis
-        </a>
+        </Link>
       </div>
     </>
   );

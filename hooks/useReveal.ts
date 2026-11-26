@@ -53,5 +53,5 @@ export function useReveal({
     }
 
     return () => obs.disconnect();
-  }, []);
+  }, [baseDelay, heroSelector, stepDelay]);
 }

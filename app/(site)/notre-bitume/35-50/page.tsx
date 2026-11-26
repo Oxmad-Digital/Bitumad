@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 import "../notre-bitume.css";
 
@@ -193,9 +194,9 @@ export default function Bitume3550Page() {
         <div className="nb-desc-layout">
           <div>
             <div className="nb-desc-body reveal reveal-delay-2">
-              <p>Le <strong>bitume de pénétration 35/50</strong> est un liant hydrocarboné de grade plus dur que le 60/70, issu de la distillation du pétrole brut. Comme son homologue, il se présente sous forme solide à température ambiante et devient fluide sous l'effet de la chaleur pour son application sur les chaussées.</p>
-              <p>La désignation <strong>35/50</strong> correspond à l'indice de pénétrabilité du produit : une aiguille standard de 100 grammes ne pénètre qu'entre 35 et 50 dixièmes de millimètre dans le bitume à 25 °C pendant 5 secondes. Ce chiffre plus faible indique un produit plus rigide — son point de ramollissement atteint 52 à 60 °C contre 49-56 °C pour le 60/70.</p>
-              <p>Ce grade est particulièrement adapté aux <strong>zones côtières malgaches</strong> — Toamasina, Mahajanga, Toliary, Nosy Be — où les températures de surface des chaussées peuvent dépasser 70 °C en plein ensoleillement. Sa rigidité supérieure lui confère une résistance accrue à l'orniérage dans ces conditions extrêmes.</p>
+              <p>Le <strong>bitume de pénétration 35/50</strong> est un liant hydrocarboné de grade plus dur que le 60/70, issu de la distillation du pétrole brut. Comme son homologue, il se présente sous forme solide à température ambiante et devient fluide sous l&apos;effet de la chaleur pour son application sur les chaussées.</p>
+              <p>La désignation <strong>35/50</strong> correspond à l&apos;indice de pénétrabilité du produit : une aiguille standard de 100 grammes ne pénètre qu&apos;entre 35 et 50 dixièmes de millimètre dans le bitume à 25 °C pendant 5 secondes. Ce chiffre plus faible indique un produit plus rigide — son point de ramollissement atteint 52 à 60 °C contre 49-56 °C pour le 60/70.</p>
+              <p>Ce grade est particulièrement adapté aux <strong>zones côtières malgaches</strong> — Toamasina, Mahajanga, Toliary, Nosy Be — où les températures de surface des chaussées peuvent dépasser 70 °C en plein ensoleillement. Sa rigidité supérieure lui confère une résistance accrue à l&apos;orniérage dans ces conditions extrêmes.</p>
               <p>Le bitume 35/50 convient aux couches de roulement des routes littorales, aux aires portuaires, aux voiries industrielles côtières et à toute surface soumise à la fois à des <strong>charges élevées et à une chaleur ambiante intense</strong>.</p>
             </div>
           </div>
@@ -219,7 +220,7 @@ export default function Bitume3550Page() {
                 </div>
               ))}
             </div>
-            <div className="nb-composition-footer">Valeurs conformes au certificat d'analyse lot par lot</div>
+            <div className="nb-composition-footer">Valeurs conformes au certificat d&apos;analyse lot par lot</div>
           </div>
         </div>
       </section>
@@ -278,7 +279,7 @@ export default function Bitume3550Page() {
 
       {/* ─── APPLICATIONS ─── */}
       <section id="nb-applications" className="nb-section-applications">
-        <div className="nb-eyebrow reveal">Domaines d'application</div>
+        <div className="nb-eyebrow reveal">Domaines d&apos;application</div>
         <h2 className="nb-section-title reveal reveal-delay-1">POUR QUELS<br />CHANTIERS CÔTIERS ?</h2>
         <p className="nb-section-lead reveal reveal-delay-2">
           Le bitume 35/50 est la solution de référence pour les infrastructures littorales, portuaires et les zones à très forte exposition thermique à Madagascar.
@@ -346,7 +347,7 @@ export default function Bitume3550Page() {
         <div className="nb-download-layout">
           <div className="nb-download-left">
             <p className="nb-section-lead reveal reveal-delay-2">
-              La fiche technique complète du bitume de pénétration 35/50 regroupe l'ensemble des spécifications ASTM, les recommandations spécifiques aux zones côtières, ainsi que les conditions de transport et de stockage.
+              La fiche technique complète du bitume de pénétration 35/50 regroupe l&apos;ensemble des spécifications ASTM, les recommandations spécifiques aux zones côtières, ainsi que les conditions de transport et de stockage.
             </p>
             <div className="nb-pdf-includes reveal reveal-delay-3">
               <div className="nb-pdf-includes-title">Contenu du document</div>
@@ -379,7 +380,7 @@ export default function Bitume3550Page() {
               <div className="nb-pdf-meta">
                 <div className="nb-pdf-type">Fiche technique · PDF</div>
                 <div className="nb-pdf-name">Bitume de pénétration 35/50</div>
-                <div className="nb-pdf-desc">Spécifications complètes, méthodes ASTM, recommandations pour zones côtières, conditions de stockage et d'application.</div>
+                <div className="nb-pdf-desc">Spécifications complètes, méthodes ASTM, recommandations pour zones côtières, conditions de stockage et d&apos;application.</div>
                 <div className="nb-pdf-details">
                   <span className="nb-pdf-detail">Format PDF</span>
                   <span className="nb-pdf-detail">Version 2025</span>
@@ -395,7 +396,7 @@ export default function Bitume3550Page() {
                 </svg>
               </div>
               <div className="nb-contact-nudge-text">
-                Besoin d'un certificat d'analyse pour un lot spécifique ?{" "}
+                Besoin d&apos;un certificat d&apos;analyse pour un lot spécifique ?{" "}
                 <a href="/contact">Contactez notre équipe</a> — nous vous le transmettrons sous 48h.
               </div>
             </div>
@@ -418,9 +419,9 @@ export default function Bitume3550Page() {
           <h2>PRÊT À PASSER<br />COMMANDE ?</h2>
           <p>Notre équipe vous accompagne du devis à la livraison sur site.</p>
         </div>
-        <a href="/#commander" className="nb-cta-banner-btn">
+        <Link href="/#commander" className="nb-cta-banner-btn">
           Commander
-        </a>
+        </Link>
       </div>
     </>
   );

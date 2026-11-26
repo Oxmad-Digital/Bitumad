@@ -42,7 +42,7 @@ function Devis() {
               <div className="devis-promise-icon"><IconPin /></div>
               <div>
                 <div className="devis-promise-title">Livraison sur site</div>
-                <div className="devis-promise-desc">Transport organisé directement jusqu'à votre chantier, partout à Madagascar.</div>
+                <div className="devis-promise-desc">Transport organisé directement jusqu&apos;à votre chantier, partout à Madagascar.</div>
               </div>
             </div>
           </div>

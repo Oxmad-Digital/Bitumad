@@ -143,13 +143,13 @@ export default function HomePage() {
               Bitumad est une entreprise spécialisée dans la fourniture de
               bitume à Madagascar. Nous proposons deux grades de bitume de
               pénétration — le <strong className="text-white-strong">60/70</strong> pour les zones tropicales de
-              l'intérieur, et le <strong className="text-white-strong">35/50</strong> pour les zones côtières à
+              l&apos;intérieur, et le <strong className="text-white-strong">35/50</strong> pour les zones côtières à
               fort ensoleillement — conformes aux normes internationales ASTM.
             </p>
             <p>
-              Nos produits s'adressent aussi bien aux institutions publiques,
-              aux entreprises de BTP qu'aux particuliers, garantissant qualité,
-              durabilité et performance pour vos projets d'infrastructure
+              Nos produits s&apos;adressent aussi bien aux institutions publiques,
+              aux entreprises de BTP qu&apos;aux particuliers, garantissant qualité,
+              durabilité et performance pour vos projets d&apos;infrastructure
               partout à Madagascar.
             </p>
           </div>
@@ -174,7 +174,7 @@ export default function HomePage() {
               </div>
               <div className="feature-title">Performance optimale</div>
               <div className="feature-desc">
-                Deux grades disponibles — 60/70 pour l'intérieur, 35/50 pour
+                Deux grades disponibles — 60/70 pour l&apos;intérieur, 35/50 pour
                 la côte — chacun adapté à son contexte climatique.
               </div>
             </div>
@@ -189,7 +189,7 @@ export default function HomePage() {
               <div className="feature-title">Sécurité renforcée</div>
               <div className="feature-desc">
                 Point éclair élevé (≥ 250 °C) minimisant les risques liés au
-                transport et à l'application.
+                transport et à l&apos;application.
               </div>
             </div>
             <div className="feature-card">
@@ -322,7 +322,7 @@ export default function HomePage() {
                 <div className="process-title">Livraison sur site</div>
                 <div className="process-desc">
                   Nous organisons la logistique et assurons le transport du bitume
-                  directement jusqu'à votre chantier, partout à Madagascar, avec
+                  directement jusqu&apos;à votre chantier, partout à Madagascar, avec
                   un suivi rigoureux pour respecter les délais.
                 </div>
               </div>
@@ -379,7 +379,7 @@ export default function HomePage() {
                 <div>
                   <div className="devis-promise-title">Livraison sur site</div>
                   <div className="devis-promise-desc">
-                    Transport organisé directement jusqu'à votre chantier,
+                    Transport organisé directement jusqu&apos;à votre chantier,
                     partout à Madagascar.
                   </div>
                 </div>
