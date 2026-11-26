@@ -1,12 +1,15 @@
-import { Resend } from "resend";
 import { after, NextResponse } from "next/server";
 import { saveInquiry, type NewInquiry } from "@/lib/db";
 import { forwardToErp, syncPendingToErp } from "@/lib/erp";
 import { clientIp, rateLimit, TOO_MANY } from "@/lib/rate-limit";
 import { EMAIL_RE } from "@/lib/site";
 
-// Created on first use: without RESEND_API_KEY (local build, preview) requests are still stored for the admin.
-let resend: Resend | null = null;
+const CONTACT_EMAIL = "info@bitumad.mg";
+
+type PlunkSendResult = {
+  success?: boolean;
+  data?: { emails?: { status: string }[] };
+};
 
 const LOGO_URL =
   "https://media.bitumad.mg/bitumad_logo_cercle_remove_v2_zcpvnc.webp";
@@ -17,6 +20,8 @@ function escapeHtml(value: unknown): string {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
+    // Plunk also interprets Liquid syntax in inline HTML.
+    .replaceAll("{", "&#123;")
     .replace(/\n/g, "<br/>");
 }
 
@@ -162,17 +167,30 @@ export async function POST(req: Request) {
   });
   let emailed = false;
   try {
-    if (!process.env.RESEND_API_KEY) throw new Error("RESEND_API_KEY is not set");
-    resend ??= new Resend(process.env.RESEND_API_KEY);
-    const { error } = await resend.emails.send({
-      from: "Bitumad <info@bitumad.mg>",
-      to: "info@bitumad.mg",
-      replyTo: email,
-      subject,
-      html,
+    const apiKey = process.env.PLUNK_SECRET_KEY;
+    if (!apiKey) throw new Error("PLUNK_SECRET_KEY is not set");
+
+    const response = await fetch("https://next-api.useplunk.com/v1/send", {
+      method: "POST",
+      headers: { authorization: `Bearer ${apiKey}`, "content-type": "application/json" },
+      body: JSON.stringify({
+        from: { name: "Bitumad", email: CONTACT_EMAIL },
+        to: CONTACT_EMAIL,
+        reply: email,
+        // A subject is plain text, so use a fullwidth brace to break Liquid delimiters.
+        subject: subject.replace(/[\r\n]+/g, " ").replace(/\{(?=[{%])/g, "｛"),
+        body: html,
+      }),
+      signal: AbortSignal.timeout(8000),
     });
-    emailed = !error;
-    if (error) console.error("contact email failed:", error);
+    const result: PlunkSendResult | null = response.ok ? await response.json().catch(() => null) : null;
+    emailed = result?.success === true && result.data?.emails?.[0]?.status === "queued";
+    if (!emailed) {
+      console.error("contact email failed: Plunk did not queue the email", {
+        status: response.status,
+        requestId: response.headers.get("x-request-id"),
+      });
+    }
   } catch (error) {
     console.error("contact email failed:", error);
   }

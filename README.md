@@ -43,7 +43,8 @@ Repris de l'admin Oxmad Digital : statistiques d'audience sans cookie, demandes 
 Mise en place (une fois) :
 
 1. Créer une base Neon dédiée à Bitumad et copier `.env.example` en `.env.local` (`DATABASE_URL`,
-   `ADMIN_SESSION_SECRET` de 32+ caractères, `RESEND_API_KEY`). Mêmes variables sur Vercel.
+   `ADMIN_SESSION_SECRET` de 32+ caractères, `PLUNK_SECRET_KEY`). Mêmes variables sur Vercel.
+   Le domaine `bitumad.mg` doit être vérifié dans le projet Plunk pour envoyer depuis `info@bitumad.mg`.
 2. `npm run db:setup` : crée les tables (`db/schema.sql`, idempotent).
 3. `npm run admin:create -- prenom@bitumad.mg "Prénom Nom"` : crée un compte (mot de passe affiché).
 
