@@ -9,7 +9,7 @@ import { EMAIL_RE } from "@/lib/site";
 let resend: Resend | null = null;
 
 const LOGO_URL =
-  "https://res.cloudinary.com/uuiwf5lx/image/upload/q_auto/f_auto/v1779650741/bitumad_logo_cercle_remove_v2_zcpvnc.webp";
+  "https://media.bitumad.mg/bitumad_logo_cercle_remove_v2_zcpvnc.webp";
 
 function escapeHtml(value: unknown): string {
   const str = value === null || value === undefined || value === "" ? "—" : String(value);

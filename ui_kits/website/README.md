@@ -18,6 +18,6 @@ High-fidelity, interactive recreation of the Bitumad marketing site (the real Ne
 
 ## Assets
 - Logo: `../../assets/bitumad-logo-simple.webp`. Hero photo: `../../assets/bitumad-hero-route.jpg`.
-- Video strip streams from the project's Cloudinary URL (external).
+- Video strip streams from the project's public R2 media domain (external).
 
 This is a recreation for design reference — not production code.

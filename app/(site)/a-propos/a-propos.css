@@ -18,13 +18,13 @@
 }
 
 .page-hero-bg--1 {
-  background-image: url('https://res.cloudinary.com/uuiwf5lx/image/upload/v1784581719/Bitumad_camion-rouge-sadam_d7tnop.jpg');
+  background-image: url('https://media.bitumad.mg/Bitumad_camion-rouge-sadam_d7tnop.jpg');
   z-index: 1;
   animation: heroCrossfade 10s ease-in-out infinite;
 }
 
 .page-hero-bg--2 {
-  background-image: url('https://res.cloudinary.com/uuiwf5lx/image/upload/q_auto/f_auto/v1781869241/Bitumad_camion-remorque-jaune_m3rrao.webp');
+  background-image: url('https://media.bitumad.mg/Bitumad_camion-remorque-jaune_m3rrao.webp');
   z-index: 0;
 }
 

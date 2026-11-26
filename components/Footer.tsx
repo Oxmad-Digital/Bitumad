@@ -4,13 +4,13 @@ export default function Footer() {
       <a href="/" className="footer-logo">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://res.cloudinary.com/uuiwf5lx/image/upload/v1784583472/bitumad_logo_remove_rectangle_dark_qguxh1.webp"
+          src="https://media.bitumad.mg/bitumad_logo_remove_rectangle_dark_qguxh1.webp"
           alt="Bitumad"
           className="footer-logo-img footer-logo-img--dark"
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://res.cloudinary.com/uuiwf5lx/image/upload/v1784583262/bitumad_logo_remove_rectangle_light_xxbtnx.webp"
+          src="https://media.bitumad.mg/bitumad_logo_remove_rectangle_light_xxbtnx.webp"
           alt="Bitumad"
           className="footer-logo-img footer-logo-img--light"
         />

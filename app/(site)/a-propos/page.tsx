@@ -116,7 +116,7 @@ export default function APropos() {
               Bitumad voit le jour à Antananarivo, portée par la conviction que l&apos;état des infrastructures routières est un frein majeur au développement de Madagascar.
             </p>
             <Image
-              src="https://res.cloudinary.com/uuiwf5lx/image/upload/q_auto/f_auto/v1780760304/bitumad-route-rurale-degradee-laterite-madagascar_lyucox.jpg"
+              src="https://media.bitumad.mg/bitumad-route-rurale-degradee-laterite-madagascar_lyucox.jpg"
               alt="Route rurale dégradée à Madagascar — latérite rouge"
               className="histoire-photo reveal reveal-delay-3"
               width={560}
@@ -336,7 +336,7 @@ export default function APropos() {
             </div>
           </div>
           <Image
-            src="https://res.cloudinary.com/uuiwf5lx/image/upload/v1784582208/Bitumad_chargement-conteneur-futs_ivyrl8.webp"
+            src="https://media.bitumad.mg/Bitumad_chargement-conteneur-futs_ivyrl8.webp"
             alt="Déchargement de fûts de bitume depuis un camion sur site"
             className="supply-chain-photo reveal reveal-delay-3"
             width={560}

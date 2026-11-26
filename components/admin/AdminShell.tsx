@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { ChevronRight, Globe, Menu, X } from "lucide-react";
 
-const LOGO = "https://res.cloudinary.com/uuiwf5lx/image/upload/v1784583472/bitumad_logo_remove_rectangle_dark_qguxh1.webp";
+const LOGO = "https://media.bitumad.mg/bitumad_logo_remove_rectangle_dark_qguxh1.webp";
 
 const sectionLabels: Record<string, string> = {
   devis: "Demandes de devis",

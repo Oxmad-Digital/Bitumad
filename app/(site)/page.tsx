@@ -92,7 +92,7 @@ export default function HomePage() {
       <div className="hero">
         <div className="hero-bg-wrap" ref={heroBgRef}>
           <Image
-            src="https://res.cloudinary.com/uuiwf5lx/image/upload/q_auto/f_auto/v1779650742/bitumad_hero_route_madagascar_avce_fux_de_bitume_whcflo.jpg"
+            src="https://media.bitumad.mg/bitumad_hero_route_madagascar_avce_fux_de_bitume_whcflo.jpg"
             alt="Route asphaltée à Madagascar — Bitumad, fournisseur de bitume de pénétration"
             fill
             priority
@@ -329,7 +329,7 @@ export default function HomePage() {
             </div>
           </div>
           <Image
-            src="https://res.cloudinary.com/uuiwf5lx/image/upload/v1784582515/bitumad_camion_f%C3%BBts-de-bitume_soir_nw6v3j.webp"
+            src="https://media.bitumad.mg/bitumad_camion_f%C3%BBts-de-bitume_soir_nw6v3j.webp"
             alt="Zone de chargement de bitume au crépuscule"
             className="process-img reveal reveal-delay-3"
             width={400}

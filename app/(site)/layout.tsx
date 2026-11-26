@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   creator: "Bitumad",
   metadataBase: new URL("https://www.bitumad.mg"),
   alternates: { canonical: "/" },
-  icons: { icon: "https://res.cloudinary.com/uuiwf5lx/image/upload/v1784664047/bitumad_logo_carr%C3%A9_spjwlw.webp" },
+  icons: { icon: "https://media.bitumad.mg/bitumad_logo_carr%C3%A9_spjwlw.webp" },
   openGraph: {
     type: "website",
     url: "https://www.bitumad.mg",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     siteName: "Bitumad",
     images: [
       {
-        url: "https://res.cloudinary.com/uuiwf5lx/image/upload/q_auto/f_auto/v1779650742/bitumad_hero_route_madagascar_avce_fux_de_bitume_whcflo.jpg",
+        url: "https://media.bitumad.mg/bitumad_hero_route_madagascar_avce_fux_de_bitume_whcflo.jpg",
         width: 1200,
         height: 630,
         alt: "Bitumad — Fournisseur de bitume à Madagascar",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     description:
       "Livraison de bitume 60/70 et 35/50 à Madagascar, conforme aux normes ASTM. Bitumad, votre fournisseur fiable pour vos chantiers BTP.",
     images: [
-      "https://res.cloudinary.com/uuiwf5lx/image/upload/q_auto/f_auto/v1779650742/bitumad_hero_route_madagascar_avce_fux_de_bitume_whcflo.jpg",
+      "https://media.bitumad.mg/bitumad_hero_route_madagascar_avce_fux_de_bitume_whcflo.jpg",
     ],
   },
 };
@@ -53,7 +53,7 @@ const jsonLd = {
   "@type": "Organization",
   name: "Bitumad",
   url: "https://www.bitumad.mg",
-  logo: "https://res.cloudinary.com/uuiwf5lx/image/upload/q_auto/f_auto/v1779650741/bitumad_logo_cercle_remove_v2_zcpvnc.webp",
+  logo: "https://media.bitumad.mg/bitumad_logo_cercle_remove_v2_zcpvnc.webp",
   description: "Bitumad est le fournisseur de référence en bitume de pénétration 60/70 et 35/50 à Madagascar. Qualité conforme aux normes internationales ASTM.",
   address: {
     "@type": "PostalAddress",

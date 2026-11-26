@@ -9,7 +9,7 @@ export default function Maintenance({ message }: { message: string }) {
     <main id="main-content" className="mnt">
       <div className="mnt-card">
         <Image
-          src="https://res.cloudinary.com/uuiwf5lx/image/upload/q_auto/f_auto/v1779650741/bitumad_logo_cercle_remove_v2_zcpvnc.webp"
+          src="https://media.bitumad.mg/bitumad_logo_cercle_remove_v2_zcpvnc.webp"
           alt="Bitumad"
           width={96}
           height={96}

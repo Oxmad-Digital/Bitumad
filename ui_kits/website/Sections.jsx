@@ -41,7 +41,7 @@ function Hero({ onNav }) {
 function VideoStrip() {
   return (
     <div className="video-strip">
-      <video src="https://res.cloudinary.com/uuiwf5lx/video/upload/q_auto/f_auto/v1779650745/Bitumad_vid%C3%A9o_bitume_coulant_ejc7u8.mp4" autoPlay muted loop playsInline />
+      <video src="https://media.bitumad.mg/Bitumad_vid%C3%A9o_bitume_coulant_ejc7u8.mp4" autoPlay muted loop playsInline />
       <div className="video-strip-overlay" />
       <span className="video-label">Bitumad · Application sur chantier</span>
     </div>

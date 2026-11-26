@@ -23,7 +23,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
+        hostname: 'media.bitumad.mg',
+        search: '',
       },
     ],
     minimumCacheTTL: 86400,
